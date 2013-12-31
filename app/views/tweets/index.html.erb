@@ -1,0 +1,18 @@
+<% sleep 5 %>
+<h1>Tweets#index</h1>
+<p>Show all tweets stored here!</p>
+<h1>Listing Tweets</h1>
+ 
+<table>
+  <tr>
+    <th>Tweet ID</th>
+    <th>Tweet Text</th>
+  </tr>
+ 
+  <% @tweets.each do |tweet| %>
+    <tr>
+      <td><%= tweet.id %></td>
+      <td><%= tweet.text %></td>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,2 @@
+syck has been removed, psych is used instead
+Faraday::Builder is now Faraday::RackBuilder.

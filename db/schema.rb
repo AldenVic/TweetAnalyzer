@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131220210113) do
+ActiveRecord::Schema.define(version: 20140103213335) do
 
   create_table "sentiments", id: false, force: true do |t|
     t.integer "id",        limit: 8
@@ -20,12 +20,12 @@ ActiveRecord::Schema.define(version: 20131220210113) do
   end
 
   create_table "tweets", id: false, force: true do |t|
-    t.integer "id",            limit: 8
-    t.date    "created_at"
-    t.integer "user_id",       limit: 8
-    t.string  "text"
-    t.string  "coordinates"
-    t.string  "user_location"
+    t.integer  "id",            limit: 8
+    t.datetime "created_at"
+    t.integer  "user_id",       limit: 8
+    t.string   "text"
+    t.string   "coordinates"
+    t.string   "user_location"
   end
 
 end

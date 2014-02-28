@@ -31,6 +31,9 @@ gem 'tweetstream'
 
 gem "sentiwordnet_ruby", "~> 0.0.1"
 
+gem "klout", "~> 3.0.0"
+
+gem "geocoder"
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc'

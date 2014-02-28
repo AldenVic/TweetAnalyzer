@@ -2,6 +2,7 @@
 ENV["RAILS_ENV"] ||= "development"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'tweetstream'
+require 'geocoder'
 
 puts "Loading auth keys..."
 
@@ -31,12 +32,31 @@ TweetStream::Client.new.track("#" + hashtag) do |status, client|
   tweet[:text] = status[:text]
   if status[:coordinates] and status[:coordinates][:type] == 'Point'
     tweet[:coordinates] = status[:coordinates][:coordinates]
-  puts "#{status[:coordinates][:coordinates]}"
+    coordinates = Coordinates.find(1, :conditions => ["ABS(lat-#{status[:coordinates][:coordinates][0]}) < 0.1 AND ABS(lon-#{status[:coordinates][:coordinates][1]}) < 0.1"])
+    if(!coordinates)
+      coordinates[:lat] = status[:coordinates][:coordinates][0]
+      coordinates[:long] = status[:coordinates][:coordinates][1]
+      coordinates.save
+    end
+    tweet[:coord_id] = coordinates[:id]
   else
     tweet[:coordinates] = "UNKNOWN"
   end
   if status[:user][:location] and status[:user][:location] != ""
     tweet[:user_location] = status[:user][:location]
+    if tweet[:coordinates] == "UNKNOWN" # Find coordiantes based on user profile data and save to Coordinates table
+      latlong = Geocoder.coordinates(tweet.user_location)
+      sleep(0.5)
+      if(latlong)
+        coordinates = Coordinates.find(1, :conditions => ["ABS(lat-#{latlong[0]}) < 0.1 AND ABS(lon-#{latlong[1]}) < 0.1"])
+        if(!coordinates)
+          coordinates[:lat] = latlong[0]
+          coordinates[:long] = latlong[1]
+          coordinates.save
+        end
+        tweet[:coord_id] = coordinates[:id]
+      end
+    end
   else
     tweet[:user_location] = "UNKNOWN"
   end
